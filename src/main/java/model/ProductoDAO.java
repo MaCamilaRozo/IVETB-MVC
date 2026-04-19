@@ -33,6 +33,25 @@ public class ProductoDAO {
 
     public List<Producto> listar() throws SQLException {
         List<Producto> productos = new ArrayList<>();
+        System.out.println("Conectado a la BD...");
+
+        try (Connection connection = Conexion.getConnection();
+                PreparedStatement statement = connection.prepareStatement("SELECT DATABASE()");
+                ResultSet rs = statement.executeQuery()) {
+
+            if (rs.next()) {
+                System.out.println("Database actual: " + rs.getString(1));
+            }
+        }
+
+        try (Connection connection = Conexion.getConnection();
+                PreparedStatement st = connection.prepareStatement("SELECT COUNT(*) FROM productos");
+                ResultSet rs = st.executeQuery()) {
+
+            if (rs.next()) {
+                System.out.println("Cantidad en DB (Java): " + rs.getInt(1));
+            }
+        }
 
         try (Connection connection = Conexion.getConnection();
                 PreparedStatement statement = connection.prepareStatement(SELECT_ALL);
