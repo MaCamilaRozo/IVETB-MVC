@@ -108,4 +108,24 @@ public class ProductoDAO {
             statement.executeUpdate();
         }
     }
+
+    public static void main(String[] args) {
+        ProductoDAO dao = new ProductoDAO();
+
+        try {
+            List<Producto> lista = dao.listar();
+
+            System.out.println("Cantidad de productos: " + lista.size());
+
+            for (Producto p : lista) {
+                System.out.println(
+                        p.getIdProducto() + " - " +
+                                p.getNombre() + " - " +
+                                p.getTipoProducto());
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
