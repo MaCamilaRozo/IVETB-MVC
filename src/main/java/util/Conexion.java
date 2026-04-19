@@ -9,7 +9,7 @@ public class Conexion {
             "DB_URL",
             "jdbc:mysql://localhost:3306/ivetb_proyecto?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true");
     private static final String USER = getenvOrDefault("DB_USER", "root");
-    private static final String PASSWORD = getenvOrDefault("DB_PASSWORD", "");
+    private static final String PASSWORD = getenvOrDefault("DB_PASSWORD", "Alfonsina24.");
 
     private Conexion() {
     }
