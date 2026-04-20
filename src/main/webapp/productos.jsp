@@ -1,11 +1,5 @@
 <%
     Object obj = request.getAttribute("productos");
-
-    if (obj == null) {
-        out.println("<p style='color:red;'>DEBUG: productos es NULL</p>");
-    } else {
-        out.println("<p style='color:green;'>DEBUG: productos NO es NULL</p>");
-    }
 %>
 <%@ page import="java.util.*, model.Producto" %>
 

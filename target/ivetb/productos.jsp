@@ -1,3 +1,6 @@
+<%
+    Object obj = request.getAttribute("productos");
+%>
 <%@ page import="java.util.*, model.Producto" %>
 
 <h1>Lista de Productos</h1>
