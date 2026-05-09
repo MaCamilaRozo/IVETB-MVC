@@ -1,46 +1,43 @@
 package controller;
 
+import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.*;
-import jakarta.servlet.http.*;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.List;
 
 import model.Producto;
 import model.ProductoDAO;
 
-@WebServlet("/ProductoServlet")
+@WebServlet("/productos")
 public class ProductoServlet extends HttpServlet {
 
     private final ProductoDAO productoDAO = new ProductoDAO();
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    protected void doGet(HttpServletRequest request,
+            HttpServletResponse response)
             throws ServletException, IOException {
 
         System.out.println("🔥 Servlet ejecutado");
 
-        try {
-            // 1. Get data from DAO (DB)
-            List<Producto> productos = productoDAO.listar();
+        // 1. Obtener datos desde el DAO
+        List<Producto> productos = productoDAO.listar();
 
-            // 2. Debug
-            System.out.println("➡️ Productos desde servlet: " + productos.size());
+        // 2. Debug
+        System.out.println(
+                "➡️ Productos desde servlet: " + productos.size());
 
-            // 3. Send data to JSP
-            request.setAttribute("productos", productos);
+        // 3. Enviar datos al JSP
+        request.setAttribute("productos", productos);
 
-            // 4. Forward to view
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/productos.jsp");
-            dispatcher.forward(request, response);
+        // 4. Redireccionar a la vista
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/productos.jsp");
 
-        } catch (SQLException e) {
-            e.printStackTrace();
-
-            request.setAttribute("error", "Error al obtener productos: " + e.getMessage());
-
-            request.getRequestDispatcher("/productos.jsp").forward(request, response);
-        }
+        dispatcher.forward(request, response);
     }
 }
