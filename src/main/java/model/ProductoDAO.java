@@ -13,6 +13,14 @@ public class ProductoDAO {
     private static final String SELECT_ALL = """
             SELECT id_producto, id_unidad, nombre, tipo_producto, descripcion
             FROM productos
+            WHERE activo = TRUE
+            ORDER BY id_producto DESC
+            """;
+
+    private static final String SELECT_INACTIVOS = """
+            SELECT id_producto, id_unidad, nombre, tipo_producto, descripcion
+            FROM productos
+            WHERE activo = FALSE
             ORDER BY id_producto DESC
             """;
 
@@ -33,7 +41,11 @@ public class ProductoDAO {
             WHERE id_producto = ?
             """;
 
-    private static final String DELETE = "DELETE FROM productos WHERE id_producto = ?";
+    private static final String SOFT_DELETE =
+            "UPDATE productos SET activo = FALSE WHERE id_producto = ?";
+
+    private static final String RESTAURAR =
+            "UPDATE productos SET activo = TRUE WHERE id_producto = ?";
 
     public List<Producto> listar() {
 
@@ -146,6 +158,44 @@ public class ProductoDAO {
         return producto;
     }
 
+    public List<Producto> listarEliminados() {
+
+        List<Producto> productos = new ArrayList<>();
+
+        try (Connection connection = Conexion.getConnection();
+                PreparedStatement statement = connection.prepareStatement(SELECT_INACTIVOS);
+                ResultSet resultSet = statement.executeQuery()) {
+
+            while (resultSet.next()) {
+
+                Producto producto = new Producto();
+
+                producto.setIdProducto(
+                        resultSet.getInt("id_producto"));
+
+                producto.setIdUnidad(
+                        resultSet.getInt("id_unidad"));
+
+                producto.setNombre(
+                        resultSet.getString("nombre"));
+
+                producto.setTipoProducto(
+                        resultSet.getString("tipo_producto"));
+
+                producto.setDescripcion(
+                        resultSet.getString("descripcion"));
+
+                productos.add(producto);
+            }
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+        }
+
+        return productos;
+    }
+
     public void insertar(Producto producto) {
 
         try (Connection connection = Conexion.getConnection();
@@ -186,7 +236,22 @@ public class ProductoDAO {
     public void eliminar(int id) {
 
         try (Connection connection = Conexion.getConnection();
-                PreparedStatement statement = connection.prepareStatement(DELETE)) {
+                PreparedStatement statement = connection.prepareStatement(SOFT_DELETE)) {
+
+            statement.setInt(1, id);
+
+            statement.executeUpdate();
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+        }
+    }
+
+    public void restaurar(int id) {
+
+        try (Connection connection = Conexion.getConnection();
+                PreparedStatement statement = connection.prepareStatement(RESTAURAR)) {
 
             statement.setInt(1, id);
 
