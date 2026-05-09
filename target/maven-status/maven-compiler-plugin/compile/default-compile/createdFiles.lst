@@ -1,5 +1,4 @@
 model/ProductoDAO.class
 model/Producto.class
 controller/ProductoServlet.class
-util/TestConexion.class
 util/Conexion.class
